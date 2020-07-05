@@ -1,0 +1,129 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta charset="UTF-8">
+		<title>Quadradic Equation Calculator</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <style>
+            html,body {font-family: Roboto;margin: 0;padding: 0}
+            h2{padding: 20px;box-sizing: border-box;background: #000;color: #f1f1f1;margin: 0;top:-10px;}
+            h2 img {width:30px;filter:grayscale() brightness(400%);margin-right:20px;position:relative;top:10px;}
+            .grid{width: 1200px;margin: auto}
+            h4 {font-size: 25px;color: #555;}
+            input {width:100px;;border: 2px solid black;height: 50px;box-shadow: 0 1px 5px rgba(0,0,0,0.2);padding-left: 10px;font-size: 20px;background: #f1f1f1;outline: none;margin: 20px auto}
+            span{font-size: 30px;margin: auto 20px}
+            h3{font-size: 30px;color: deepskyblue}
+            p{font-size: 20px;font-weight: 200;border: 2px solid deepskyblue;display: inline-block;padding: 20px 40px;min-width: 300px;min-height: 50px}
+            button{position: relative;margin-top: 40px;border: none;background: #333;padding: 20px 40px;color: #f1f1f1;font-size: 18px;border-radius: 10px;cursor: pointer;transition: all 0.3s;outline: none}
+            button:hover{background: deepskyblue}
+            i {font-style: normal;margin: 0;padding: 0;}
+            em { white-space: nowrap;font-style: normal;margin: 0;font-weight: 100}
+            .lds-ripple{display:inline-block;position:relative;width:80px;height:80px}.lds-ripple div{position:absolute;border:4px solid deepskyblue;opacity:1;border-radius:50%;animation:lds-ripple 1s cubic-bezier(0,.2,.8,1) infinite}.lds-ripple div:nth-child(2){animation-delay:-.5s}@keyframes lds-ripple{0%{top:36px;left:36px;width:0;height:0;opacity:1}100%{top:0;left:0;width:72px;height:72px;opacity:0}}
+            .loader {position: fixed;top: 0; text-align: center;width: 100%;height: 100%;z-index: 9998;background: rgba(0,0,0,0.7);display: none;}
+            .lds-ripple {position: absolute;top: 0;bottom: 0;}
+           @media (max-width: 1200px) {
+           	.grid { width: 95%;}
+           }
+           @media (max-width: 600px) {
+           	input {width:50%}
+           }
+ 
+        </style>
+	</head>
+	<body>
+ 
+        <h2><img src="logo.png"/>Quadratic Equation Calculator</h2>
+        <div class="grid">
+        
+        
+        <h4>Enter an equation</h4>
+        <small style="font-size:15px">Enter a quadratic equation below by adding the coefficients for a,b and c like so: aX<sup>2</sup> + bX + c = 0</small><br><br>
+        <input class="x2" type="text"><span>x<sup>2</sup> +</span><input class="x1" type="text"><span>x+</span><input class="x0" type="text"><span>= 0</span>
+        <br>    
+        <button>Calculate</button>    
+        
+        <br><br>    
+        <h3>Solution</h3>
+        
+        <p class="values"></p> 
+        
+         
+        </div>
+          
+        
+         <div class="loader"><div class="lds-ripple"><div></div><div></div></div></div>
+        
+         
+        
+        <script>
+ 
+             
+            $('button').on('click', function() {
+                var a,b,c;
+                showLoader();
+                
+                if(!$('.x1').val()) {
+                    $('.x1').val('1');
+                }
+                if(!$('.x2').val()) {
+                    $('.x2').val('1');
+                }
+                if(!$('.x0').val()) {
+                    $('.x0').val('1');
+                }
+                
+                setTimeout(function() {
+                a = parseFloat($('.x2').val());
+                b = parseFloat($('.x1').val());
+                c = parseFloat($('.x0').val());   
+                
+                //(-b+sqrt(b^2 - 4ac))/ 2a
+                var quad1 = (-b + Math.sqrt(Math.pow(b, 2) - 4*a*c))/(2*a);
+                //(-b-sqrt(b^2 - 4ac))/ 2a
+                var quad2 = (-b - Math.sqrt(Math.pow(b, 2) - 4*a*c))/(2*a);
+                
+                
+                if((Math.pow(b, 2) - (4*a*c)) < 0) { 
+                    if((Math.pow(b, 2) - (4*a*c)) % 2 == 0) {
+                    $('.values').html('X = '+ ''+(-b/(2*a))+' + <em><i>'+((Math.sqrt(Math.abs(Math.pow(b, 2) - (4*a*c))))/(2*a))+'</i></em> i'+' , X = '+ ''+(-b/2*a)+' - <em><i>'+((Math.sqrt(Math.abs(Math.pow(b, 2) - (4*a*c))))/(2*a))+'</i></em> i'); 
+                    }  
+                    else {
+                        $('.values').html('X = '+ ''+(-b/(2*a))+' + <em><i>'+((Math.sqrt(Math.abs(Math.pow(b, 2) - (4*a*c))))/(2*a)).toFixed(5)+'</i></em> i'+' , X = '+ ''+(-b/(2*a))+' - <em><i>'+((Math.sqrt(Math.abs(Math.pow(b, 2) - (4*a*c))))/(2*a)).toFixed(5)+'</i></em> i'); 
+                    }
+                }   
+                else {
+                    if(quad1 % 1 != 0 && quad2 % 1 != 0) {
+                        $('.values').html('X = '+quad1.toFixed(5)+'&emsp;'+'X = '+quad2.toFixed(5));
+                    }
+                    else if(quad1 % 1 != 0 && quad2 % 1 == 0) {
+                        $('.values').html('X = '+quad1.toFixed(5)+'&emsp;'+'X = '+quad2);
+                    }
+                    else if(quad1 % 1 == 0 && quad2 % 1 != 0){
+                        $('.values').html('X = '+quad1+'&emsp;'+'X = '+quad2.toFixed(5));
+                    }
+                    else {
+                        $('.values').html('X = '+quad1+'&emsp;'+'X = '+quad2);
+                    }
+                }   
+                    
+                },400)     
+                 
+            }); 
+             
+            
+            function showLoader() {
+                $('.loader').fadeIn(100);
+                setTimeout(function() { $('.loader').fadeOut(50) },500)
+            } 
+             
+            
+             
+            
+        </script>
+        
+        
+        
+        
+	</body>
+</html>
